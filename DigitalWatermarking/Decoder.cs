@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace WindowsFormsApp2
+namespace DigitalWatermarking
 {
     public class Decoder
     {

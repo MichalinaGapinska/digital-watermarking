@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp2
+namespace DigitalWatermarking
 {
     partial class Form1
     {

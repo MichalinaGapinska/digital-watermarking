@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp2
+namespace DigitalWatermarking
 {
     public partial class Form1 : Form
     {
         private Encoder _encoder;
         private Decoder _decoder;
-        private const string method_byte_encoding_text = "Byte encoding (text)";
-        private const string method_another = "Another method";
-        private object[] encodingMethods = {method_byte_encoding_text, method_another};
+        private const string MethodByteEncodingText = "Byte encoding (text)";
+        private const string MethodAnother = "Another method";
+        private readonly object[] _encodingMethods = {MethodByteEncodingText, MethodAnother};
 
 
         public Form1()
@@ -23,8 +22,8 @@ namespace WindowsFormsApp2
             InitializeComponent();
             _encoder = new Encoder();
             _decoder = new Decoder();
-            cb_method_encoding.Items.AddRange(encodingMethods);
-            cb_method_encoding.SelectedItem = encodingMethods[0];
+            cb_method_encoding.Items.AddRange(_encodingMethods);
+            cb_method_encoding.SelectedItem = _encodingMethods[0];
 
             UpdateEnableEncoding();
         }
@@ -53,10 +52,10 @@ namespace WindowsFormsApp2
 
             switch (selectedMethod)
             {
-                case method_byte_encoding_text:
+                case MethodByteEncodingText:
                     ByteEncodeProcess(originalImage, message);
                     break;
-                case method_another:
+                case MethodAnother:
                 // sthg else
                 default:
                     // nothing
@@ -83,9 +82,9 @@ namespace WindowsFormsApp2
             var messageBits = new BitArray(bytes);
 
 
-            for (int row = 0; row < codedImage.Height; row++)
+            for (var row = 0; row < codedImage.Height; row++)
             {
-                for (int col = 0; col < codedImage.Width; col++)
+                for (var col = 0; col < codedImage.Width; col++)
                 {
                     var index = (row * col + col) * 3;
                     var pixel = codedImage.GetPixel(col, row);
@@ -139,37 +138,38 @@ namespace WindowsFormsApp2
             return (byte) (b | (1 << 0));
         }
 
-        public static byte[] ToByteArray(BitArray bits)
+        private static IEnumerable<byte> ToByteArray(BitArray bits)
         {
-            int numBytes = bits.Count / 8;
+            var numBytes = bits.Count / 8;
             if (bits.Count % 8 != 0) numBytes++;
 
-            byte[] bytes = new byte[numBytes];
+            var bytes = new byte[numBytes];
             int byteIndex = 0, bitIndex = 0;
 
-            for (int i = 0; i < bits.Count; i++)
+            for (var i = 0; i < bits.Count; i++)
             {
                 if (bits[i])
                     bytes[byteIndex] |= (byte) (1 << (bitIndex));
 
                 bitIndex++;
-                if (bitIndex == 8)
+                if (bitIndex != 8)
                 {
-                    bitIndex = 0;
-                    byteIndex++;
+                    continue;
                 }
+                bitIndex = 0;
+                byteIndex++;
             }
 
             return bytes;
         }
 
-        byte GetByte(BitArray input)
+        private byte GetByte(BitArray input)
         {
-            int len = input.Length;
+            var len = input.Length;
             if (len > 8)
                 len = 8;
-            int output = 0;
-            for (int i = 0; i < len; i++)
+            var output = 0;
+            for (var i = 0; i < len; i++)
                 if (input.Get(i))
                     output += (1 << (len - 1 - i)); //this part depends on your system (Big/Little)
             //output += (1 << i); //depends on system
@@ -188,12 +188,11 @@ namespace WindowsFormsApp2
 
         private void UpdateEnableEncoding()
         {
-
             btn_start.Enabled = !string.IsNullOrEmpty(tb_message_original.Text) &&
-                                 cb_method_encoding.SelectedItem != null &&
-                                 !string.IsNullOrEmpty(ofd_file_chooser.SafeFileName);
-            
-            lbl_start_error.Text = btn_start.Enabled ?  "" : "Choose method, message, file to start!";
+                                cb_method_encoding.SelectedItem != null &&
+                                !string.IsNullOrEmpty(ofd_file_chooser.SafeFileName);
+
+            lbl_start_error.Text = btn_start.Enabled ? "" : "Choose method, message, file to start!";
         }
     }
 }
