@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace DigitalWatermarking
 {
-    partial class Form1
+    partial class ByteForm
     {
         /// <summary>
         /// Required designer variable.
@@ -45,8 +45,7 @@ namespace DigitalWatermarking
             this.lbl_message_decoded = new System.Windows.Forms.Label();
             this.lbl_file_original = new System.Windows.Forms.Label();
             this.gb_input = new System.Windows.Forms.GroupBox();
-            this.lbl_method_encoding = new System.Windows.Forms.Label();
-            this.cb_method_encoding = new System.Windows.Forms.ComboBox();
+            this.lbl_image_original = new System.Windows.Forms.Label();
             this.gb_output = new System.Windows.Forms.GroupBox();
             this.lbl_start_error = new System.Windows.Forms.Label();
             this.btn_start = new System.Windows.Forms.Button();
@@ -60,7 +59,7 @@ namespace DigitalWatermarking
             // btn_file_chooser
             // 
             this.btn_file_chooser.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.btn_file_chooser.Location = new System.Drawing.Point(24, 129);
+            this.btn_file_chooser.Location = new System.Drawing.Point(24, 83);
             this.btn_file_chooser.Name = "btn_file_chooser";
             this.btn_file_chooser.Size = new System.Drawing.Size(180, 35);
             this.btn_file_chooser.TabIndex = 0;
@@ -87,7 +86,7 @@ namespace DigitalWatermarking
             // tb_message_original
             // 
             this.tb_message_original.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.tb_message_original.Location = new System.Drawing.Point(236, 83);
+            this.tb_message_original.Location = new System.Drawing.Point(230, 37);
             this.tb_message_original.Name = "tb_message_original";
             this.tb_message_original.Size = new System.Drawing.Size(300, 26);
             this.tb_message_original.TabIndex = 4;
@@ -96,7 +95,7 @@ namespace DigitalWatermarking
             // lbl_message_original
             // 
             this.lbl_message_original.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.lbl_message_original.Location = new System.Drawing.Point(24, 83);
+            this.lbl_message_original.Location = new System.Drawing.Point(24, 38);
             this.lbl_message_original.Name = "lbl_message_original";
             this.lbl_message_original.Size = new System.Drawing.Size(200, 25);
             this.lbl_message_original.TabIndex = 5;
@@ -106,7 +105,7 @@ namespace DigitalWatermarking
             // lbl_message_decoded_text
             // 
             this.lbl_message_decoded_text.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.lbl_message_decoded_text.Location = new System.Drawing.Point(236, 83);
+            this.lbl_message_decoded_text.Location = new System.Drawing.Point(236, 88);
             this.lbl_message_decoded_text.Name = "lbl_message_decoded_text";
             this.lbl_message_decoded_text.Size = new System.Drawing.Size(300, 25);
             this.lbl_message_decoded_text.TabIndex = 6;
@@ -116,7 +115,7 @@ namespace DigitalWatermarking
             // lbl_message_decoded
             // 
             this.lbl_message_decoded.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.lbl_message_decoded.Location = new System.Drawing.Point(24, 83);
+            this.lbl_message_decoded.Location = new System.Drawing.Point(24, 88);
             this.lbl_message_decoded.Name = "lbl_message_decoded";
             this.lbl_message_decoded.Size = new System.Drawing.Size(200, 25);
             this.lbl_message_decoded.TabIndex = 7;
@@ -126,7 +125,7 @@ namespace DigitalWatermarking
             // lbl_file_original
             // 
             this.lbl_file_original.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.lbl_file_original.Location = new System.Drawing.Point(236, 135);
+            this.lbl_file_original.Location = new System.Drawing.Point(230, 89);
             this.lbl_file_original.Name = "lbl_file_original";
             this.lbl_file_original.Size = new System.Drawing.Size(300, 25);
             this.lbl_file_original.TabIndex = 8;
@@ -134,8 +133,7 @@ namespace DigitalWatermarking
             // 
             // gb_input
             // 
-            this.gb_input.Controls.Add(this.lbl_method_encoding);
-            this.gb_input.Controls.Add(this.cb_method_encoding);
+            this.gb_input.Controls.Add(this.lbl_image_original);
             this.gb_input.Controls.Add(this.lbl_message_original);
             this.gb_input.Controls.Add(this.tb_message_original);
             this.gb_input.Controls.Add(this.pb_file_original);
@@ -149,25 +147,15 @@ namespace DigitalWatermarking
             this.gb_input.TabStop = false;
             this.gb_input.Text = "Input";
             // 
-            // lbl_method_encoding
+            // lbl_image_original
             // 
-            this.lbl_method_encoding.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            this.lbl_method_encoding.Location = new System.Drawing.Point(24, 38);
-            this.lbl_method_encoding.Name = "lbl_method_encoding";
-            this.lbl_method_encoding.Size = new System.Drawing.Size(200, 25);
-            this.lbl_method_encoding.TabIndex = 10;
-            this.lbl_method_encoding.Text = "Encoding method:";
-            this.lbl_method_encoding.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cb_method_encoding
-            // 
-            this.cb_method_encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_method_encoding.FormattingEnabled = true;
-            this.cb_method_encoding.Location = new System.Drawing.Point(236, 39);
-            this.cb_method_encoding.Name = "cb_method_encoding";
-            this.cb_method_encoding.Size = new System.Drawing.Size(300, 28);
-            this.cb_method_encoding.TabIndex = 9;
-            this.cb_method_encoding.SelectedIndexChanged += new System.EventHandler(this.cb_method_encoding_SelectedIndexChanged);
+            this.lbl_image_original.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
+            this.lbl_image_original.Location = new System.Drawing.Point(24, 137);
+            this.lbl_image_original.Name = "lbl_image_original";
+            this.lbl_image_original.Size = new System.Drawing.Size(300, 25);
+            this.lbl_image_original.TabIndex = 12;
+            this.lbl_image_original.Text = "Original image:";
+            this.lbl_image_original.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // gb_output
             // 
@@ -189,7 +177,7 @@ namespace DigitalWatermarking
             // 
             this.lbl_start_error.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
             this.lbl_start_error.ForeColor = System.Drawing.Color.Red;
-            this.lbl_start_error.Location = new System.Drawing.Point(236, 39);
+            this.lbl_start_error.Location = new System.Drawing.Point(236, 38);
             this.lbl_start_error.Name = "lbl_start_error";
             this.lbl_start_error.Size = new System.Drawing.Size(300, 25);
             this.lbl_start_error.TabIndex = 11;
@@ -216,7 +204,7 @@ namespace DigitalWatermarking
             this.lbl_file_encoded.Text = "Image with encoded message:";
             this.lbl_file_encoded.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // form_name
+            // ByteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -226,7 +214,7 @@ namespace DigitalWatermarking
             this.Controls.Add(this.gb_input);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
             this.Location = new System.Drawing.Point(15, 15);
-            this.Name = "form_name";
+            this.Name = "ByteForm";
             this.Text = "Digital Watermarking";
             ((System.ComponentModel.ISupportInitialize) (this.pb_file_original)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.pb_file_encoded)).EndInit();
@@ -236,13 +224,13 @@ namespace DigitalWatermarking
             this.ResumeLayout(false);
         }
 
+        private System.Windows.Forms.Label lbl_image_original;
+
         private System.Windows.Forms.Label lbl_start_error;
 
         private System.Windows.Forms.Button btn_start;
 
         private System.Windows.Forms.OpenFileDialog ofd_file_chooser;
-
-        private System.Windows.Forms.ComboBox cb_method_encoding;
 
         private System.Windows.Forms.PictureBox pb_file_original;
 
@@ -251,8 +239,6 @@ namespace DigitalWatermarking
         private System.Windows.Forms.Button btn_file_chooser;
 
         private System.Windows.Forms.Label lbl_message_decoded_text;
-
-        private System.Windows.Forms.Label lbl_method_encoding;
 
         private System.Windows.Forms.Label lbl_message_original;
 

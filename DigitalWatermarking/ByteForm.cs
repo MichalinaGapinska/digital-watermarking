@@ -8,22 +8,16 @@ using System.Windows.Forms;
 
 namespace DigitalWatermarking
 {
-    public partial class Form1 : Form
+    public partial class ByteForm : Form
     {
         private Encoder _encoder;
         private Decoder _decoder;
-        private const string MethodByteEncodingText = "Byte encoding (text)";
-        private const string MethodAnother = "Another method";
-        private readonly object[] _encodingMethods = {MethodByteEncodingText, MethodAnother};
-
-
-        public Form1()
+        
+        public ByteForm()
         {
             InitializeComponent();
             _encoder = new Encoder();
             _decoder = new Decoder();
-            cb_method_encoding.Items.AddRange(_encodingMethods);
-            cb_method_encoding.SelectedItem = _encodingMethods[0];
 
             UpdateEnableEncoding();
         }
@@ -46,21 +40,9 @@ namespace DigitalWatermarking
 
         private void start_click(object sender, EventArgs e)
         {
-            var selectedMethod = cb_method_encoding.SelectedItem.ToString();
             var message = tb_message_original.Text;
             var originalImage = new Bitmap(ofd_file_chooser.FileName);
-
-            switch (selectedMethod)
-            {
-                case MethodByteEncodingText:
-                    ByteEncodeProcess(originalImage, message);
-                    break;
-                case MethodAnother:
-                // sthg else
-                default:
-                    // nothing
-                    break;
-            }
+            ByteEncodeProcess(originalImage, message);
         }
 
         private void ByteEncodeProcess(Bitmap originalImage, String message)
@@ -176,11 +158,6 @@ namespace DigitalWatermarking
             return (byte) output;
         }
 
-        private void cb_method_encoding_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateEnableEncoding();
-        }
-
         private void tb_message_original_TextChanged(object sender, EventArgs e)
         {
             UpdateEnableEncoding();
@@ -189,10 +166,10 @@ namespace DigitalWatermarking
         private void UpdateEnableEncoding()
         {
             btn_start.Enabled = !string.IsNullOrEmpty(tb_message_original.Text) &&
-                                cb_method_encoding.SelectedItem != null &&
+                                //cb_method_encoding.SelectedItem != null &&
                                 !string.IsNullOrEmpty(ofd_file_chooser.SafeFileName);
 
-            lbl_start_error.Text = btn_start.Enabled ? "" : "Choose method, message, file to start!";
+            lbl_start_error.Text = btn_start.Enabled ? "" : "Choose message and file to start!";
         }
     }
 }
