@@ -6,12 +6,25 @@ namespace DigitalWatermarking.encoder
 {
     public abstract class AbstractEncoder<T>
     {
-        public Bitmap Encode(Bitmap image, T message)
-        {
-            var clone = (Bitmap) image.Clone();
+        private Bitmap _outBitmap;
+        private T _message;
+        private bool _encoded = false;
 
-            var bitmapData1 = clone.LockBits(new Rectangle(0, 0, clone.Width, clone.Height),
-                ImageLockMode.ReadWrite, clone.PixelFormat);
+        public Bitmap GetEncoded()
+        {
+            return !_encoded ? null : _outBitmap;
+        }
+
+        protected AbstractEncoder(Bitmap bitmap, T message)
+        {
+            _outBitmap = (Bitmap) bitmap.Clone();
+            _message = message;
+        }
+
+        public void Encode()
+        {
+            var bitmapData1 = _outBitmap.LockBits(new Rectangle(0, 0, _outBitmap.Width, _outBitmap.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
             unsafe
             {
@@ -22,7 +35,7 @@ namespace DigitalWatermarking.encoder
                 {
                     for (var j = 0; j < bitmapData1.Width; j++)
                     {
-                        ProcessPixel(imagePointer1, position++, message);
+                        ProcessPixel(imagePointer1);
                         imagePointer1 += 4; //4 bytes per pixel
                     }
 
@@ -30,9 +43,21 @@ namespace DigitalWatermarking.encoder
                 }
             }
 
-            return clone;
+            _encoded = true;
+            _outBitmap.UnlockBits(bitmapData1);
         }
 
-        protected abstract unsafe void ProcessPixel(byte* pixelPointer, int position, T message);
+        protected abstract unsafe void ProcessPixel(byte* pixelPointer);
+
+
+        protected byte SetZero(byte b)
+        {
+            return (byte) (b & ~(1 << 0));
+        }
+
+        protected byte SetOne(byte b)
+        {
+            return (byte) (b | (1 << 0));
+        }
     }
 }

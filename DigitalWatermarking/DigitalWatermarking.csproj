@@ -52,6 +52,7 @@
     <ItemGroup>
         <Compile Include="Decoder.cs" />
         <Compile Include="decoder\AbstractDecoderBitBase.cs" />
+        <Compile Include="decoder\LsbTextDecoder.cs" />
         <Compile Include="Encoder.cs" />
         <Compile Include="ByteForm.cs">
             <SubType>Form</SubType>
@@ -61,6 +62,7 @@
         </Compile>
         <Compile Include="encoder\AbstractEncoderBitBase.cs" />
         <Compile Include="encoder\LsbTextEncoder.cs" />
+        <Compile Include="fourier\FFT.cs" />
         <Compile Include="MethodSelectorForm.cs">
           <SubType>Form</SubType>
         </Compile>

@@ -5,13 +5,25 @@ namespace DigitalWatermarking.decoder
 {
     public abstract class AbstractDecoderBitBase<T>
     {
-        public T Encode(Bitmap image)
-        {
-            var clone = (Bitmap) image.Clone();
-            var message = GetEmptyMessage();
+        protected Bitmap _bitmap;
+        private T _message;
+        protected bool _isDecoded = false;
 
-            var bitmapData1 = clone.LockBits(new Rectangle(0, 0, clone.Width, clone.Height),
-                ImageLockMode.ReadWrite, clone.PixelFormat);
+        protected AbstractDecoderBitBase(Bitmap bitmap)
+        {
+            _bitmap = (Bitmap) bitmap.Clone();
+        }
+
+        public T GetMessage()
+        {
+            return _isDecoded ? _message : GetEmptyMessage();
+        }
+
+        public void Decode()
+        {
+
+            var bitmapData1 = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height),
+                ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
             unsafe
             {
@@ -22,7 +34,7 @@ namespace DigitalWatermarking.decoder
                 {
                     for (var j = 0; j < bitmapData1.Width; j++)
                     {
-                        message = ProcessPixel(imagePointer1, position++, message);
+                        ProcessPixel(imagePointer1);
                         imagePointer1 += 4; //4 bytes per pixel
                     }
 
@@ -30,10 +42,10 @@ namespace DigitalWatermarking.decoder
                 }
             }
 
-            return message;
+            _isDecoded = true;
         }
 
-        protected abstract unsafe T ProcessPixel(byte* pixelPointer, int position, T message);
+        protected abstract unsafe void ProcessPixel(byte* pixelPointer);
 
         protected abstract T GetEmptyMessage();
     }
