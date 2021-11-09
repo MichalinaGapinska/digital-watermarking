@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace DigitalWatermarking.encoder
 {
-    public abstract class AbstractEncoder<T>
+    public abstract class AbstractBitBaseEncoder<T>
     {
         private Bitmap _outBitmap;
         private T _message;
@@ -15,7 +15,7 @@ namespace DigitalWatermarking.encoder
             return !_encoded ? null : _outBitmap;
         }
 
-        protected AbstractEncoder(Bitmap bitmap, T message)
+        protected AbstractBitBaseEncoder(Bitmap bitmap, T message)
         {
             _outBitmap = (Bitmap) bitmap.Clone();
             _message = message;

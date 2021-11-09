@@ -3,12 +3,12 @@ using System.Drawing;
 
 namespace DigitalWatermarking.encoder
 {
-    public class LsbTextEncoder : AbstractEncoder<string>
+    public class LsbTextBitBaseEncoder : AbstractBitBaseEncoder<string>
     {
         private readonly BitArray _messageInBit;
         private int _position;
 
-        public LsbTextEncoder(Bitmap bitmap, string message) : base(bitmap, message)
+        public LsbTextBitBaseEncoder(Bitmap bitmap, string message) : base(bitmap, message)
         {
             var bytes = System.Text.Encoding.Default.GetBytes(message);
             _messageInBit = new BitArray(bytes);
