@@ -6,17 +6,12 @@ namespace DigitalWatermarking.decoder
     public abstract class AbstractDecoderBitBase<T>
     {
         protected Bitmap _bitmap;
-        private T _message;
+        public T Message { get; set; }
         protected bool _isDecoded = false;
 
         protected AbstractDecoderBitBase(Bitmap bitmap)
         {
             _bitmap = (Bitmap) bitmap.Clone();
-        }
-
-        public T GetMessage()
-        {
-            return _isDecoded ? _message : GetEmptyMessage();
         }
 
         public void Decode()

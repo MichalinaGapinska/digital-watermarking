@@ -65,6 +65,12 @@
         <Compile Include="view\ByteForm.Designer.cs">
           <DependentUpon>ByteForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="view\ImageByteForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="view\ImageByteForm.Designer.cs">
+          <DependentUpon>ImageByteForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="view\MethodSelectorForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -82,6 +88,9 @@
         </Compile>
         <EmbeddedResource Include="view\ByteForm.resx">
           <DependentUpon>ByteForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="view\ImageByteForm.resx">
+          <DependentUpon>ImageByteForm.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="view\MethodSelectorForm.resx">
           <DependentUpon>MethodSelectorForm.cs</DependentUpon>
