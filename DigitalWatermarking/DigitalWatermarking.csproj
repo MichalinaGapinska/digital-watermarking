@@ -52,23 +52,18 @@
   <ItemGroup>
     <Compile Include="decoder\AbstractDecoderBitBase.cs" />
     <Compile Include="decoder\FFTColorDecoder.cs" />
-    <Compile Include="decoder\FFTDecoder.cs" />
     <Compile Include="decoder\LsbImageDecoder.cs" />
     <Compile Include="decoder\LsbTextDecoder.cs" />
     <Compile Include="encoder\AbstractEncoderBitBase.cs" />
+    <Compile Include="decoder\FFTDecoder.cs" />
     <Compile Include="encoder\FFTColorEncoder.cs" />
-    <Compile Include="encoder\FFTEncoder.cs" />
     <Compile Include="encoder\LsbImageEncoder.cs" />
+    <Compile Include="encoder\FFTEncoder.cs" />
     <Compile Include="encoder\LsbTextEncoder.cs" />
+    <Compile Include="fourier\FFTColor.cs" />
     <Compile Include="fourier\FFT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="view\ByteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="view\ByteForm.Designer.cs">
-      <DependentUpon>ByteForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="view\FFTColorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +75,12 @@
     </Compile>
     <Compile Include="view\FFTForm.Designer.cs">
       <DependentUpon>FFTForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\ByteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\ByteForm.Designer.cs">
+      <DependentUpon>ByteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="view\ImageByteForm.cs">
       <SubType>Form</SubType>
@@ -102,14 +103,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="view\ByteForm.resx">
-      <DependentUpon>ByteForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="view\FFTColorForm.resx">
       <DependentUpon>FFTColorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="view\FFTForm.resx">
       <DependentUpon>FFTForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\ByteForm.resx">
+      <DependentUpon>ByteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="view\ImageByteForm.resx">
       <DependentUpon>ImageByteForm.cs</DependentUpon>
