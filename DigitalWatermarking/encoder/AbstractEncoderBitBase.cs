@@ -6,30 +6,31 @@ namespace DigitalWatermarking.encoder
 {
     public abstract class AbstractBitBaseEncoder<T>
     {
-        private Bitmap _outBitmap;
-        private T _message;
         private bool _encoded = false;
+
+        public T Message { get; set; }
+
+        protected Bitmap OutBitmap { get; set; }
 
         public Bitmap GetEncoded()
         {
-            return !_encoded ? null : _outBitmap;
+            return !_encoded ? null : OutBitmap;
         }
 
         protected AbstractBitBaseEncoder(Bitmap bitmap, T message)
         {
-            _outBitmap = (Bitmap) bitmap.Clone();
-            _message = message;
+            OutBitmap = (Bitmap) bitmap.Clone();
+            Message = message;
         }
 
         public void Encode()
         {
-            var bitmapData1 = _outBitmap.LockBits(new Rectangle(0, 0, _outBitmap.Width, _outBitmap.Height),
+            var bitmapData1 = OutBitmap.LockBits(new Rectangle(0, 0, OutBitmap.Width, OutBitmap.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
             unsafe
             {
                 var imagePointer1 = (byte*) bitmapData1.Scan0;
-                var position = 0;
 
                 for (var i = 0; i < bitmapData1.Height; i++)
                 {
@@ -44,7 +45,7 @@ namespace DigitalWatermarking.encoder
             }
 
             _encoded = true;
-            _outBitmap.UnlockBits(bitmapData1);
+            OutBitmap.UnlockBits(bitmapData1);
         }
 
         protected abstract unsafe void ProcessPixel(byte* pixelPointer);
