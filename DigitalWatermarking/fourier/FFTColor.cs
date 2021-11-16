@@ -4,37 +4,17 @@ using System.Drawing.Imaging;
 
 namespace DigitalWatermarking.fourier
 {
-    /// <summary>
-    /// Defining Structure for Complex Data type  N=R+Ii
-    /// </summary>
-    struct COMPLEX
-    {
-        public double real, imag;
 
-        public COMPLEX(double x, double y)
-        {
-            real = x;
-            imag = y;
-        }
-
-        public float Magnitude()
-        {
-            return ((float) Math.Sqrt(real * real + imag * imag));
-        }
-
-        public float Phase()
-        {
-            return ((float) Math.Atan(imag / real));
-        }
-    }
-
-    class FFT
+    class FFTColor
     {
         public Bitmap Obj; // Input Object Image
         public Bitmap FourierPlot; // Generated Fouruer Magnitude Plot
         public Bitmap PhasePlot; // Generated Fourier Phase Plot
 
-        public int[,] GreyImage; //GreyScale Image Array Generated from input Image
+        public int[,] BImage;
+        public int[,] GImage;
+        public int[,] RImage;
+        public int[,] AlphaImage;
         public float[,] FourierMagnitude;
         public float[,] FourierPhase;
 
@@ -44,16 +24,26 @@ namespace DigitalWatermarking.fourier
         public int[,] FFTPhaseNormalized; // Normalized FFT Phase : Scale 0-1
         int nx, ny; //Number of Points in Width & height
         public int Width, Height;
-        COMPLEX[,] Fourier; //Fourier Magnitude  Array Used for Inverse FFT
+        public COMPLEX[,] BFourier; //Fourier Magnitude  Array Used for Inverse FFT
+        public COMPLEX[,] GFourier; //Fourier Magnitude  Array Used for Inverse FFT
+        public COMPLEX[,] RFourier; //Fourier Magnitude  Array Used for Inverse FFT
+        public COMPLEX[,] AlphaFourier; //Fourier Magnitude  Array Used for Inverse FFT
         public COMPLEX[,] FFTShifted; // Shifted FFT 
-        public COMPLEX[,] Output; // FFT Normal
+        public COMPLEX[,] RFFTShifted; // Shifted FFT 
+        public COMPLEX[,] GFFTShifted; // Shifted FFT 
+        public COMPLEX[,] BFFTShifted; // Shifted FFT 
+        public COMPLEX[,] AlphaFFTShifted; // Shifted FFT 
+        public COMPLEX[,] BOutput; // FFT Normal
+        public COMPLEX[,] GOutput; // FFT Normal
+        public COMPLEX[,] ROutput; // FFT Normal
+        public COMPLEX[,] AlphaOutput; // FFT Normal
         public COMPLEX[,] FFTNormal; // FFT Shift Removed - required for Inverse FFT 
 
         /// <summary>
         /// Parameterized Constructor for FFT Reads Input Bitmap to a Greyscale Array
         /// </summary>
         /// <param name="Input">Input Image</param>
-        public FFT(Bitmap Input)
+        public FFTColor(Bitmap Input)
         {
             Obj = Input;
             Width = nx = Input.Width;
@@ -65,22 +55,10 @@ namespace DigitalWatermarking.fourier
         /// Parameterized Constructor for FFT
         /// </summary>
         /// <param name="Input">Greyscale Array</param>
-        public FFT(int[,] Input)
+        public FFTColor(int[,] Input)
         {
-            GreyImage = Input;
             Width = nx = Input.GetLength(0);
             Height = ny = Input.GetLength(1);
-        }
-
-        /// <summary>
-        /// Constructor for Inverse FFT
-        /// </summary>
-        /// <param name="Input"></param>
-        public FFT(COMPLEX[,] Input)
-        {
-            nx = Width = Input.GetLength(0);
-            ny = Height = Input.GetLength(1);
-            Fourier = Input;
         }
 
         /// <summary>
@@ -89,7 +67,10 @@ namespace DigitalWatermarking.fourier
         public void ReadImage()
         {
             int i, j;
-            GreyImage = new int[Width, Height]; //[Row,Column]
+            BImage = new int[Width, Height]; //[Row,Column]
+            GImage = new int[Width, Height]; //[Row,Column]
+            RImage = new int[Width, Height]; //[Row,Column]
+            AlphaImage = new int[Width, Height]; //[Row,Column]
             Bitmap image = Obj;
             BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
                 ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
@@ -101,8 +82,10 @@ namespace DigitalWatermarking.fourier
                 {
                     for (j = 0; j < bitmapData1.Width; j++)
                     {
-                        GreyImage[j, i] = (int) ((imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3.0);
-                      
+                        BImage[j, i] = imagePointer1[0];
+                        GImage[j, i] = imagePointer1[1];
+                        RImage[j, i] = imagePointer1[2];
+                        AlphaImage[j, i] = imagePointer1[3];                        
                         imagePointer1 += 4;
                     } //end for j
 
@@ -130,10 +113,10 @@ namespace DigitalWatermarking.fourier
                     for (j = 0; j < bitmapData1.Width; j++)
                     {
                         // write the logic implementation here
-                        imagePointer1[0] = (byte) GreyImage[j, i];
-                        imagePointer1[1] = (byte) GreyImage[j, i];
-                        imagePointer1[2] = (byte) GreyImage[j, i];
-                        imagePointer1[3] = (byte) 255;
+                        imagePointer1[0] = (byte) BImage[j, i];
+                        imagePointer1[1] = (byte) GImage[j, i];
+                        imagePointer1[2] = (byte) RImage[j, i];
+                        imagePointer1[3] = (byte) AlphaImage[j,i];
                         //4 bytes per pixel
                         imagePointer1 += 4;
                     } //end for j
@@ -184,18 +167,36 @@ namespace DigitalWatermarking.fourier
         {
             //Initializing Fourier Transform Array
             int i, j;
-            Fourier = new COMPLEX [Width, Height];
-            Output = new COMPLEX[Width, Height];
+            BFourier = new COMPLEX [Width, Height];
+            GFourier = new COMPLEX [Width, Height];
+            RFourier = new COMPLEX [Width, Height];
+            AlphaFourier = new COMPLEX [Width, Height];
+
+            ROutput = new COMPLEX[Width, Height];
+            GOutput = new COMPLEX[Width, Height];
+            BOutput = new COMPLEX[Width, Height];
+            AlphaOutput = new COMPLEX[Width, Height];
             //Copy Image Data to the Complex Array
             for (i = 0; i <= Width - 1; i++)
             for (j = 0; j <= Height - 1; j++)
             {
-                Fourier[i, j].real = (double) GreyImage[i, j];
-                Fourier[i, j].imag = 0;
-            }
+                BFourier[i, j].real = (double) BImage[i, j];
+                BFourier[i, j].imag = 0;
 
+                GFourier[i, j].real = (double) GImage[i, j];
+                GFourier[i, j].imag = 0;
+
+                RFourier[i, j].real = (double) RImage[i, j];
+                RFourier[i, j].imag = 0;
+
+                AlphaFourier[i, j].real = (double)AlphaImage[i, j];
+                AlphaFourier[i, j].imag = 0;
+            }
             //Calling Forward Fourier Transform
-            Output = FFT2D(Fourier, nx, ny, 1);
+            BOutput = FFT2D(BFourier, nx, ny, 1);
+            GOutput = FFT2D(GFourier, nx, ny, 1);
+            ROutput = FFT2D(RFourier, nx, ny, 1);
+            AlphaOutput = FFT2D(AlphaFourier, nx, ny, 1);
             return;
         }
 
@@ -205,190 +206,38 @@ namespace DigitalWatermarking.fourier
         public void FFTShift()
         {
             int i, j;
-            FFTShifted = new COMPLEX[nx, ny];
+            RFFTShifted = new COMPLEX[nx, ny];
+            GFFTShifted = new COMPLEX[nx, ny];
+            BFFTShifted = new COMPLEX[nx, ny];
+            AlphaFFTShifted = new COMPLEX[nx, ny];
 
             for (i = 0; i <= (nx / 2) - 1; i++)
             for (j = 0; j <= (ny / 2) - 1; j++)
             {
-                FFTShifted[i + (nx / 2), j + (ny / 2)] = Output[i, j];
-                FFTShifted[i, j] = Output[i + (nx / 2), j + (ny / 2)];
-                FFTShifted[i + (nx / 2), j] = Output[i, j + (ny / 2)];
-                FFTShifted[i, j + (ny / 2)] = Output[i + (nx / 2), j];
+           
+
+                RFFTShifted[i + (nx / 2), j + (ny / 2)] = ROutput[i, j];
+                RFFTShifted[i, j] = ROutput[i + (nx / 2), j + (ny / 2)];
+                RFFTShifted[i + (nx / 2), j] = ROutput[i, j + (ny / 2)];
+                RFFTShifted[i, j + (ny / 2)] = ROutput[i + (nx / 2), j];
+
+                GFFTShifted[i + (nx / 2), j + (ny / 2)] = GOutput[i, j];
+                GFFTShifted[i, j] = GOutput[i + (nx / 2), j + (ny / 2)];
+                GFFTShifted[i + (nx / 2), j] = GOutput[i, j + (ny / 2)];
+                GFFTShifted[i, j + (ny / 2)] = GOutput[i + (nx / 2), j];
+
+                BFFTShifted[i + (nx / 2), j + (ny / 2)] = BOutput[i, j];
+                BFFTShifted[i, j] = BOutput[i + (nx / 2), j + (ny / 2)];
+                BFFTShifted[i + (nx / 2), j] = BOutput[i, j + (ny / 2)];
+                BFFTShifted[i, j + (ny / 2)] = BOutput[i + (nx / 2), j];
+
+                AlphaFFTShifted[i + (nx / 2), j + (ny / 2)] = AlphaOutput[i, j];
+                AlphaFFTShifted[i, j] = AlphaOutput[i + (nx / 2), j + (ny / 2)];
+                AlphaFFTShifted[i + (nx / 2), j] = AlphaOutput[i, j + (ny / 2)];
+                AlphaFFTShifted[i, j + (ny / 2)] = AlphaOutput[i + (nx / 2), j];
             }
 
             return;
-        }
-
-        /// <summary>
-        /// Removes FFT Shift for FFTshift Array
-        /// </summary>
-        public void RemoveFFTShift()
-        {
-            int i, j;
-            FFTNormal = new COMPLEX[nx, ny];
-
-            for (i = 0; i <= (nx / 2) - 1; i++)
-            for (j = 0; j <= (ny / 2) - 1; j++)
-            {
-                FFTNormal[i + (nx / 2), j + (ny / 2)] = FFTShifted[i, j];
-                FFTNormal[i, j] = FFTShifted[i + (nx / 2), j + (ny / 2)];
-                FFTNormal[i + (nx / 2), j] = FFTShifted[i, j + (ny / 2)];
-                FFTNormal[i, j + (ny / 2)] = FFTShifted[i + (nx / 2), j];
-            }
-
-            return;
-        }
-
-        /// <summary>
-        /// FFT Plot Method for Shifted FFT
-        /// </summary>
-        /// <param name="Output"></param>
-        public void FFTPlot(COMPLEX[,] Output)
-        {
-            int i, j;
-            float max;
-
-            FFTLog = new float[nx, ny];
-            FFTPhaseLog = new float[nx, ny];
-
-            FourierMagnitude = new float[nx, ny];
-            FourierPhase = new float[nx, ny];
-
-            FFTNormalized = new int[nx, ny];
-            FFTPhaseNormalized = new int[nx, ny];
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FourierMagnitude[i, j] = Output[i, j].Magnitude();
-                FourierPhase[i, j] = Output[i, j].Phase();
-                FFTLog[i, j] = (float) Math.Log(1 + FourierMagnitude[i, j]);
-                FFTPhaseLog[i, j] = (float) Math.Log(1 + Math.Abs(FourierPhase[i, j]));
-            }
-
-            //Generating Magnitude Bitmap
-            max = FFTLog[0, 0];
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                if (FFTLog[i, j] > max)
-                    max = FFTLog[i, j];
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTLog[i, j] = FFTLog[i, j] / max;
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTNormalized[i, j] = (int) (2000 * FFTLog[i, j]);
-            }
-
-            //Transferring Image to Fourier Plot
-            FourierPlot = Displayimage(FFTNormalized);
-
-            //generating phase Bitmap
-            FFTPhaseLog[0, 0] = 0;
-            max = FFTPhaseLog[1, 1];
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                if (FFTPhaseLog[i, j] > max)
-                    max = FFTPhaseLog[i, j];
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTPhaseLog[i, j] = FFTPhaseLog[i, j] / max;
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTPhaseNormalized[i, j] = (int) (255 * FFTPhaseLog[i, j]);
-            }
-
-            //Transferring Image to Fourier Plot
-            PhasePlot = Displayimage(FFTPhaseNormalized);
-        }
-
-        /// <summary>
-        /// generate FFT Image for Display Purpose
-        /// </summary>
-        public void FFTPlot()
-        {
-            int i, j;
-            float max;
-            FFTLog = new float [nx, ny];
-            FFTPhaseLog = new float[nx, ny];
-
-            FourierMagnitude = new float[nx, ny];
-            FourierPhase = new float[nx, ny];
-
-            FFTNormalized = new int[nx, ny];
-            FFTPhaseNormalized = new int[nx, ny];
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FourierMagnitude[i, j] = Output[i, j].Magnitude();
-                FourierPhase[i, j] = Output[i, j].Phase();
-                FFTLog[i, j] = (float) Math.Log(1 + FourierMagnitude[i, j]);
-                FFTPhaseLog[i, j] = (float) Math.Log(1 + Math.Abs(FourierPhase[i, j]));
-            }
-
-            //Generating Magnitude Bitmap
-            max = FFTLog[0, 0];
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                if (FFTLog[i, j] > max)
-                    max = FFTLog[i, j];
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTLog[i, j] = FFTLog[i, j] / max;
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTNormalized[i, j] = (int) (1000 * FFTLog[i, j]);
-            }
-
-            //Transferring Image to Fourier Plot
-            FourierPlot = Displayimage(FFTNormalized);
-
-            //generating phase Bitmap
-
-            max = FFTPhaseLog[0, 0];
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                if (FFTPhaseLog[i, j] > max)
-                    max = FFTPhaseLog[i, j];
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTPhaseLog[i, j] = FFTPhaseLog[i, j] / max;
-            }
-
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                FFTPhaseNormalized[i, j] = (int) (2000 * FFTLog[i, j]);
-            }
-
-            //Transferring Image to Fourier Plot
-            PhasePlot = Displayimage(FFTPhaseNormalized);
         }
 
         /// <summary>
@@ -400,8 +249,14 @@ namespace DigitalWatermarking.fourier
             int i, j;
 
             //Calling Forward Fourier Transform
-            Output = new COMPLEX [nx, ny];
-            Output = FFT2D(Fourier, nx, ny, -1);
+            ROutput = new COMPLEX[nx, ny];
+            GOutput = new COMPLEX[nx, ny];
+            BOutput = new COMPLEX[nx, ny];
+            AlphaOutput = new COMPLEX[nx, ny];
+            BOutput = FFT2D(BFourier, nx, ny, -1);
+            GOutput = FFT2D(GFourier, nx, ny, -1);
+            ROutput = FFT2D(RFourier, nx, ny, -1);
+            AlphaOutput = FFT2D(AlphaFourier, nx, ny, -1);
 
             Obj = null; // Setting Object Image to Null
             //Copying Real Image Back to Greyscale
@@ -409,36 +264,13 @@ namespace DigitalWatermarking.fourier
             for (i = 0; i <= Width - 1; i++)
             for (j = 0; j <= Height - 1; j++)
             {
-                GreyImage[i, j] = (int) Output[i, j].Magnitude();
+                BImage[i, j] = (int) BOutput[i, j].Magnitude();
+                GImage[i, j] = (int) GOutput[i, j].Magnitude();
+                RImage[i, j] = (int) ROutput[i, j].Magnitude();
+                AlphaImage[i, j] = (int) AlphaOutput[i, j].Magnitude();
             }
 
-            Obj = Displayimage(GreyImage);
-            return;
-        }
-
-        /// <summary>
-        /// Generates Inverse FFT of Given Input Fourier
-        /// </summary>
-        /// <param name="Fourier"></param>
-        public void InverseFFT(COMPLEX[,] Fourier)
-        {
-            //Initializing Fourier Transform Array
-            int i, j;
-
-            //Calling Forward Fourier Transform
-            Output = new COMPLEX[nx, ny];
-            Output = FFT2D(Fourier, nx, ny, -1);
-
-
-            //Copying Real Image Back to Greyscale
-            //Copy Image Data to the Complex Array
-            for (i = 0; i <= Width - 1; i++)
-            for (j = 0; j <= Height - 1; j++)
-            {
-                GreyImage[i, j] = (int) Output[i, j].Magnitude();
-            }
-
-            Obj = Displayimage(GreyImage);
+            Obj = Displayimage();
             return;
         }
 
