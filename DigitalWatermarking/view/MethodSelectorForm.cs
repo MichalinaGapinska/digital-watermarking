@@ -8,8 +8,8 @@ namespace DigitalWatermarking
     {
         private const string MethodByteEncodingText = "Byte encoding (text)";
         private const string MethodByteEncodingImage = "Byte encoding (Image)";
-        private const string MethodAnother = "Another method";
-        private readonly object[] _encodingMethods = {MethodByteEncodingText, MethodByteEncodingImage, MethodAnother};
+        private const string MethodByteWavelet = "Wavelete encoding";
+        private readonly object[] _encodingMethods = {MethodByteEncodingText, MethodByteEncodingImage, MethodByteWavelet};
 
         public MethodSelectorForm()
         {
@@ -41,9 +41,8 @@ namespace DigitalWatermarking
                 case MethodByteEncodingImage:
                     OpenForm(new ImageByteForm());
                     break;
-                case MethodAnother:
-                    // OpenForm(new sthg());
-                    Close();
+                case MethodByteWavelet:
+                    OpenForm(new WaveletForm());
                     break;
                 default:
                     Close();
@@ -53,7 +52,7 @@ namespace DigitalWatermarking
 
         private void OpenForm(Form selectedMethodForm)
         {
-            selectedMethodForm.Closed += (s, args) => Close();
+            selectedMethodForm.Closed += (s, args) => Show();
             selectedMethodForm.Show();
         }
     }

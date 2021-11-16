@@ -1,6 +1,6 @@
 ﻿namespace DigitalWatermarking.view
 {
-    partial class ByteForm
+    partial class WaveletForm
     {
         /// <summary>
         /// Required designer variable.

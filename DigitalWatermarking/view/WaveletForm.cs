@@ -6,9 +6,9 @@ using DigitalWatermarking.encoder;
 
 namespace DigitalWatermarking.view
 {
-    public partial class ByteForm : Form
+    public partial class WaveletForm : Form
     {
-        public ByteForm()
+        public WaveletForm()
         {
             InitializeComponent();
             UpdateEnableEncoding();
