@@ -97,7 +97,7 @@ namespace DigitalWatermarking.haar
         /// <summary>
         ///   Discrete Haar Wavelet Transform
         /// </summary>
-        /// 
+        /// TODO: Daubechies 
         private static void Fwt(double[] data)
         {
             var temp = new double[data.Length];
@@ -108,6 +108,10 @@ namespace DigitalWatermarking.haar
                 var k = (i << 1); // multiply by 2
                 temp[i] = data[k] * S0 + data[k + 1] * S1;
                 temp[i + h] = data[k] * W0 + data[k + 1] * W1;
+        // private const double W0 = 0.5;
+        // private const double W1 = -0.5;
+        // private const double S0 = 0.5;
+        // private const double S1 = 0.5;
             }
 
             for (var i = 0; i < data.Length; i++)
