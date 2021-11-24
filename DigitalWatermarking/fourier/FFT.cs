@@ -19,7 +19,7 @@ namespace DigitalWatermarking.fourier
 
         public float Magnitude()
         {
-            return ((float) Math.Sqrt(real * real + imag * imag));
+            return ((float)( Math.Abs(real) + Math.Abs(imag)));
         }
 
         public float Phase()

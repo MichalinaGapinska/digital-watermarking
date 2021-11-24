@@ -45,8 +45,8 @@ namespace DigitalWatermarking.encoder
             int pos = 0;
             for (int c = d1; c < Math.Min(d1 + byteMessage.Length, fft.Width); c++)
             {
-                var v1 = magnitudeOriginal[c, d2].real;
-                var v2 = magnitude[c, d2].real;
+                var v1 = magnitudeOriginal[c, d2].Magnitude();
+                var v2 = magnitude[c, d2].Magnitude();
                 int counter = 0;
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
@@ -57,8 +57,8 @@ namespace DigitalWatermarking.encoder
                     bitArray[pos] = true;
                     counter++;
                 }
-                v1 = magnitudeOriginal[c, d2 * 2].real;
-                v2 = magnitude[c, d2 * 2].real;
+                v1 = magnitudeOriginal[c, d2 * 2].Magnitude();
+                v2 = magnitude[c, d2 * 2].Magnitude();
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
                     bitArray2[pos] = false;
@@ -68,8 +68,8 @@ namespace DigitalWatermarking.encoder
                     bitArray2[pos] = true;
                     counter++;
                 }
-                v1 = magnitudeOriginal[c + d1, d2].real;
-                v2 = magnitude[c + d1, d2].real;
+                v1 = magnitudeOriginal[c + d1, d2].Magnitude();
+                v2 = magnitude[c + d1, d2].Magnitude();
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
                     bitArray3[pos] = false;
@@ -79,8 +79,8 @@ namespace DigitalWatermarking.encoder
                     bitArray3[pos] = true;
                     counter++;
                 }
-                v1 = magnitudeOriginal[c + d1, d2 * 2].real;
-                v2 = magnitude[c + d1, d2 * 2].real;
+                v1 = magnitudeOriginal[c + d1, d2 * 2].Magnitude();
+                v2 = magnitude[c + d1, d2 * 2].Magnitude();
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
                     bitArray4[pos] = false;

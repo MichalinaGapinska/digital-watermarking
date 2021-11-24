@@ -50,6 +50,11 @@ namespace DigitalWatermarking.encoder
                     magnitude[c, d2 * 2].real *= _zeroFactore;
                     magnitude[c + d1, d2].real *= _zeroFactore;
                     magnitude[c + d1, d2 * 2].real *= _zeroFactore;
+
+                    magnitude[c, d2].imag *= _zeroFactore;
+                    magnitude[c, d2 * 2].imag *= _zeroFactore;
+                    magnitude[c + d1, d2].imag *= _zeroFactore;
+                    magnitude[c + d1, d2 * 2].imag *= _zeroFactore;
                 }
                 else
                 {
@@ -57,6 +62,11 @@ namespace DigitalWatermarking.encoder
                     magnitude[c, d2 * 2].real *= _oneFactore;
                     magnitude[c + d1, d2].real *= _oneFactore;
                     magnitude[c + d1, d2 * 2].real *= _oneFactore;
+                    
+                    magnitude[c, d2].imag *= _oneFactore;
+                    magnitude[c, d2 * 2].imag *= _oneFactore;
+                    magnitude[c + d1, d2].imag *= _oneFactore;
+                    magnitude[c + d1, d2 * 2].imag *= _oneFactore;
                 }
                 pos++;
             }

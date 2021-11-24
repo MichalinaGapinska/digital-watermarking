@@ -10,9 +10,9 @@ using DigitalWatermarking.encoder;
 
 namespace DigitalWatermarking
 {
-    public partial class FFTForm : Form
+    public partial class SinColorForm : Form
     {
-        public FFTForm()
+        public SinColorForm()
         {
             InitializeComponent();
             UpdateEnableEncoding();
@@ -28,8 +28,8 @@ namespace DigitalWatermarking
             }
 
             var originalImage = new Bitmap(ofd_file_chooser.FileName);
-            var encoder = new FFTEncoder(originalImage, tb_message_original.Text);
-            pb_file_original.Image = encoder.GreyOriginalImage;
+            var encoder = new SinColorEncoder(originalImage, tb_message_original.Text);
+            pb_file_original.Image = encoder.OriginalImage;
             pb_file_original.SizeMode = PictureBoxSizeMode.StretchImage;
 
             lbl_file_original.Text = ofd_file_chooser.SafeFileName;
@@ -41,15 +41,13 @@ namespace DigitalWatermarking
         {
             var message = tb_message_original.Text;
             var originalImage = new Bitmap(ofd_file_chooser.FileName);
-            var encoder = new FFTEncoder(originalImage, message);
+            var encoder = new SinColorEncoder(originalImage, message);
             encoder.EncodeMessage();
             pb_file_encoded.Image = encoder.EncodedImage;
             pb_file_encoded.SizeMode = PictureBoxSizeMode.StretchImage;
-            magnitude_img.Image = encoder.MagnitudePlotImage;
-            magnitude_img.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            var decoder = new FFTDecoder();
-            decoder.DecodeImage(encoder.EncodedImage, encoder.GreyOriginalImage, message);
+            var decoder = new SinColorDecoder();
+            decoder.DecodeImage(encoder.EncodedImage, encoder.OriginalImage, message);
             lbl_message_decoded_text.Text = decoder.DecodedMessage;
             accuracy_label.Text = decoder.AccuracyInfo;
         }

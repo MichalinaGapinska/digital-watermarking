@@ -51,11 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="decoder\AbstractDecoderBitBase.cs" />
+    <Compile Include="decoder\CosColorDecoder.cs" />
+    <Compile Include="decoder\SinColorDecoder.cs" />
     <Compile Include="decoder\FFTColorDecoder.cs" />
     <Compile Include="decoder\LsbImageDecoder.cs" />
     <Compile Include="decoder\LsbTextDecoder.cs" />
     <Compile Include="encoder\AbstractEncoderBitBase.cs" />
     <Compile Include="decoder\FFTDecoder.cs" />
+    <Compile Include="encoder\CosColorEncoder.cs" />
+    <Compile Include="encoder\SinColorEncoder.cs" />
     <Compile Include="encoder\FFTColorEncoder.cs" />
     <Compile Include="encoder\LsbImageEncoder.cs" />
     <Compile Include="encoder\FFTEncoder.cs" />
@@ -64,6 +68,18 @@
     <Compile Include="fourier\FFT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="view\CosColorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\CosColorForm.Designer.cs">
+      <DependentUpon>CosColorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\SinColorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\SinColorForm.Designer.cs">
+      <DependentUpon>SinColorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="view\FFTColorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +119,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="view\CosColorForm.resx">
+      <DependentUpon>CosColorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\SinColorForm.resx">
+      <DependentUpon>SinColorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="view\FFTColorForm.resx">
       <DependentUpon>FFTColorForm.cs</DependentUpon>
     </EmbeddedResource>

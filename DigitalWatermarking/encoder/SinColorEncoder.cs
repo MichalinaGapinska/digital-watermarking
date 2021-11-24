@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DigitalWatermarking.encoder
 {
-    public class FFTColorEncoder
+    public class SinColorEncoder
     {
         private readonly BitArray _messageInBit;
         public Bitmap OriginalImage { get; private set; }
@@ -18,7 +18,7 @@ namespace DigitalWatermarking.encoder
 
         public Bitmap EncodedImage { get; private set; }
         public Bitmap MagnitudePlotImage { get; private set; }
-        public FFTColorEncoder(Bitmap bitmap, string message)
+        public SinColorEncoder(Bitmap bitmap, string message)
         {
             var bytes = System.Text.Encoding.Default.GetBytes(message);
             OriginalImage = bitmap;
@@ -38,25 +38,10 @@ namespace DigitalWatermarking.encoder
             var byteMessage = new BitArray(Encoding.ASCII.GetBytes(_message));
             int pos = 0;
            
-            for (int c = d1; c < Math.Min(d1 + byteMessage.Length, fft.Width); c++)
+            for (int c = d1; c < Math.Min(d1 + byteMessage.Length, fft.Width-1); c++)
             {
                 if (!byteMessage[pos])
                 {
-                    fft.RFFTShifted[c, d2].real *= _zeroFactore;
-                    fft.RFFTShifted[c, d2 * 2].real *= _zeroFactore;
-                    fft.RFFTShifted[c + d1, d2].real *= _zeroFactore;
-                    fft.RFFTShifted[c + d1, d2 * 2].real *= _zeroFactore;
-
-                    fft.GFFTShifted[c, d2].real *= _zeroFactore;
-                    fft.GFFTShifted[c, d2 * 2].real *= _zeroFactore;
-                    fft.GFFTShifted[c + d1, d2].real *= _zeroFactore;
-                    fft.GFFTShifted[c + d1, d2 * 2].real *= _zeroFactore;
-
-                    fft.BFFTShifted[c, d2].real *= _zeroFactore;
-                    fft.BFFTShifted[c, d2 * 2].real *= _zeroFactore;
-                    fft.BFFTShifted[c + d1, d2].real *= _zeroFactore;
-                    fft.BFFTShifted[c + d1, d2 * 2].real *= _zeroFactore;
-
                     fft.RFFTShifted[c, d2].imag *= _zeroFactore;
                     fft.RFFTShifted[c, d2 * 2].imag *= _zeroFactore;
                     fft.RFFTShifted[c + d1, d2].imag *= _zeroFactore;
@@ -74,21 +59,6 @@ namespace DigitalWatermarking.encoder
                 }
                 else
                 {
-                    fft.RFFTShifted[c, d2].real *= _oneFactore;
-                    fft.RFFTShifted[c, d2 * 2].real *= _oneFactore;
-                    fft.RFFTShifted[c + d1, d2].real *= _oneFactore;
-                    fft.RFFTShifted[c + d1, d2 * 2].real *= _oneFactore;
-
-                    fft.GFFTShifted[c, d2].real *= _oneFactore;
-                    fft.GFFTShifted[c, d2 * 2].real *= _oneFactore;
-                    fft.GFFTShifted[c + d1, d2].real *= _oneFactore;
-                    fft.GFFTShifted[c + d1, d2 * 2].real *= _oneFactore;
-
-                    fft.BFFTShifted[c, d2].real *= _oneFactore;
-                    fft.BFFTShifted[c, d2 * 2].real *= _oneFactore;
-                    fft.BFFTShifted[c + d1, d2].real *= _oneFactore;
-                    fft.BFFTShifted[c + d1, d2 * 2].real *= _oneFactore;
-
                     fft.RFFTShifted[c, d2].imag *= _oneFactore;
                     fft.RFFTShifted[c, d2 * 2].imag *= _oneFactore;
                     fft.RFFTShifted[c + d1, d2].imag *= _oneFactore;
@@ -103,6 +73,7 @@ namespace DigitalWatermarking.encoder
                     fft.BFFTShifted[c, d2 * 2].imag *= _oneFactore;
                     fft.BFFTShifted[c + d1, d2].imag *= _oneFactore;
                     fft.BFFTShifted[c + d1, d2 * 2].imag *= _oneFactore;
+
                 }
                 pos++;
             }

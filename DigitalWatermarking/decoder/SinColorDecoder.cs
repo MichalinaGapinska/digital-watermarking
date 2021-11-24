@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DigitalWatermarking.encoder
 {
-    public class FFTColorDecoder
+    public class SinColorDecoder
     {
         public string DecodedMessage { get; private set; }
         public string AccuracyInfo { get; private set; }
@@ -89,8 +89,8 @@ namespace DigitalWatermarking.encoder
             int pos = 0;
             for (int c = d1; c < Math.Min(d1 + byteMessage.Length, magnitude.GetLength(0)); c++)
             {
-                var v1 = magnitudeOriginal[c, d2].Magnitude();
-                var v2 = magnitude[c, d2].Magnitude();
+                var v1 = magnitudeOriginal[c, d2].imag;
+                var v2 = magnitude[c, d2].imag;
                 int counter = 0;
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
@@ -101,8 +101,8 @@ namespace DigitalWatermarking.encoder
                     bitArray[pos] = true;
                     counter++;
                 }
-                v1 = magnitudeOriginal[c, d2 * 2].Magnitude();
-                v2 = magnitude[c, d2 * 2].Magnitude();
+                v1 = magnitudeOriginal[c, d2 * 2].imag;
+                v2 = magnitude[c, d2 * 2].imag;
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
                     bitArray2[pos] = false;
@@ -112,8 +112,8 @@ namespace DigitalWatermarking.encoder
                     bitArray2[pos] = true;
                     counter++;
                 }
-                v1 = magnitudeOriginal[c + d1, d2].Magnitude();
-                v2 = magnitude[c + d1, d2].Magnitude();
+                v1 = magnitudeOriginal[c + d1, d2].imag;
+                v2 = magnitude[c + d1, d2].imag;
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
                     bitArray3[pos] = false;
@@ -123,8 +123,8 @@ namespace DigitalWatermarking.encoder
                     bitArray3[pos] = true;
                     counter++;
                 }
-                v1 = magnitudeOriginal[c + d1, d2 * 2].Magnitude();
-                v2 = magnitude[c + d1, d2 * 2].Magnitude();
+                v1 = magnitudeOriginal[c + d1, d2 * 2].imag;
+                v2 = magnitude[c + d1, d2 * 2].imag;
                 if (Math.Abs(v2) < Math.Abs(v1) || v2 == v1)
                 {
                     bitArray4[pos] = false;
