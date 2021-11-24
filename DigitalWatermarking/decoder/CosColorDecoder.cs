@@ -43,22 +43,10 @@ namespace DigitalWatermarking.encoder
             var RRes = DecodeLayer(fft.RFFTShifted, fftOriginal.RFFTShifted, message);
             var GRes = DecodeLayer(fft.GFFTShifted, fftOriginal.GFFTShifted, message);
             var BRes = DecodeLayer(fft.BFFTShifted, fftOriginal.BFFTShifted, message);
-            int pp = 0;
             for (int i = 0; i < RRes.Length; i++)
             {
                 if ((RRes[i] > 2 ? 1 : 0) + (GRes[i] > 2 ? 1 : 0) + (BRes[i] > 2 ? 1 : 0) >= 2)
                     resBitArray[i] = true;
-                if(RRes[i] > 2 && (GRes[i] <= 2 || BRes[i] <= 2))
-                {
-                    pp++;
-                }else if (GRes[i] > 2 && (RRes[i] <= 2 || BRes[i] <= 2))
-                {
-                    pp++;
-                }
-                else if (BRes[i] > 2 && (GRes[i] <= 2 || RRes[i] <= 2))
-                {
-                    pp++;
-                }
             }
                
 
