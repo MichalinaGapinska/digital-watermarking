@@ -58,10 +58,12 @@
         <Compile Include="encoder\LsbImageEncoder.cs" />
         <Compile Include="encoder\LsbTextEncoder.cs" />
         <Compile Include="fourier\FFT.cs" />
+        <Compile Include="haar\HaarDecoder.cs" />
         <Compile Include="haar\HaarEncoder.cs" />
         <Compile Include="haar\HaarTransform.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="view\BaseForm.cs" />
         <Compile Include="view\ByteForm.cs">
           <SubType>Form</SubType>
         </Compile>

@@ -47,10 +47,16 @@
             this.lbl_start_error = new System.Windows.Forms.Label();
             this.btn_start = new System.Windows.Forms.Button();
             this.lbl_file_encoded = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pb_transform = new System.Windows.Forms.PictureBox();
+            this.pb_compare = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize) (this.pb_file_original)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.pb_file_encoded)).BeginInit();
             this.gb_input.SuspendLayout();
             this.gb_output.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.pb_transform)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pb_compare)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_file_chooser
@@ -201,25 +207,62 @@
             this.lbl_file_encoded.Text = "Image with encoded message:";
             this.lbl_file_encoded.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // ByteForm
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.pb_transform);
+            this.groupBox1.Controls.Add(this.pb_compare);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
+            this.groupBox1.Location = new System.Drawing.Point(1218, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(446, 913);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Compare";
+            // 
+            // pb_transform
+            // 
+            this.pb_transform.Location = new System.Drawing.Point(22, 471);
+            this.pb_transform.Name = "pb_transform";
+            this.pb_transform.Size = new System.Drawing.Size(400, 400);
+            this.pb_transform.TabIndex = 4;
+            this.pb_transform.TabStop = false;
+            // 
+            // pb_compare
+            // 
+            this.pb_compare.Location = new System.Drawing.Point(22, 34);
+            this.pb_compare.Name = "pb_compare";
+            this.pb_compare.Size = new System.Drawing.Size(400, 400);
+            this.pb_compare.TabIndex = 3;
+            this.pb_compare.TabStop = false;
+            // 
+            // WaveletForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(1229, 771);
+            this.ClientSize = new System.Drawing.Size(1688, 959);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gb_output);
             this.Controls.Add(this.gb_input);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
             this.Location = new System.Drawing.Point(15, 15);
-            this.Name = "ByteForm";
+            this.Name = "WaveletForm";
             this.Text = "Digital Watermarking";
             ((System.ComponentModel.ISupportInitialize) (this.pb_file_original)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.pb_file_encoded)).EndInit();
             this.gb_input.ResumeLayout(false);
             this.gb_input.PerformLayout();
             this.gb_output.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.pb_transform)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pb_compare)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.PictureBox pb_compare;
+
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.PictureBox pb_transform;
 
         private System.Windows.Forms.Label lbl_image_original;
 

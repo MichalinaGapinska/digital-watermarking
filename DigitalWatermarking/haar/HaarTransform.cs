@@ -16,18 +16,15 @@ namespace DigitalWatermarking.haar
         public Bitmap OriginalImage { get; set; }
         public Bitmap TransformedImage { get; set; }
 
+        public Bitmap ReTransformedImage { get; set; }
+
+
         public ImageArrays<double> ImageArrays = new ImageArrays<double>();
 
 
-        public void Prepare(bool forward, int iterations)
+        public void Prepare(bool forward)
         {
             var bmp = forward ? new Bitmap(OriginalImage) : new Bitmap(TransformedImage);
-
-            var maxScale = (int) (Math.Log(bmp.Width < bmp.Height ? bmp.Width : bmp.Height) / Math.Log(2));
-            if (iterations < 1 || iterations > maxScale)
-            {
-                throw new Exception("Iteration must be Integer from 1 to " + maxScale);
-            }
 
             ImageArrays.Red = new double[bmp.Width, bmp.Height];
             ImageArrays.Green = new double[bmp.Width, bmp.Height];
@@ -49,13 +46,25 @@ namespace DigitalWatermarking.haar
                     }
                 }
             }
+            
+            bmp.UnlockBits(bmData);
         }
 
         public unsafe void ApplyHaarTransform(bool forward, int iterations)
         {
+            var maxScale =
+                (int) (Math.Log(OriginalImage.Width < OriginalImage.Height
+                    ? OriginalImage.Width
+                    : OriginalImage.Height) / Math.Log(2));
+            if (iterations < 1 || iterations > maxScale)
+            {
+                throw new Exception("Iteration must be Integer from 1 to " + maxScale);
+            }
+
             var bmp = new Bitmap(OriginalImage.Width, OriginalImage.Height);
             var bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite,
                 PixelFormat.Format32bppRgb);
+
 
             if (forward)
             {
@@ -89,7 +98,7 @@ namespace DigitalWatermarking.haar
             }
             else
             {
-                OriginalImage = new Bitmap(bmp);
+                ReTransformedImage = new Bitmap(bmp);
             }
         }
 
@@ -108,10 +117,10 @@ namespace DigitalWatermarking.haar
                 var k = (i << 1); // multiply by 2
                 temp[i] = data[k] * S0 + data[k + 1] * S1;
                 temp[i + h] = data[k] * W0 + data[k + 1] * W1;
-        // private const double W0 = 0.5;
-        // private const double W1 = -0.5;
-        // private const double S0 = 0.5;
-        // private const double S1 = 0.5;
+                // private const double W0 = 0.5;
+                // private const double W1 = -0.5;
+                // private const double S0 = 0.5;
+                // private const double S1 = 0.5;
             }
 
             for (var i = 0; i < data.Length; i++)
@@ -128,13 +137,14 @@ namespace DigitalWatermarking.haar
             var rows = data.GetLength(0);
             var cols = data.GetLength(1);
 
-            var row = new double[cols];
-            var col = new double[rows];
+            // var row = new double[cols];
+            // var col = new double[rows];
 
             for (var k = 0; k < iterations; k++)
             {
-                for (var i = 0; i < rows; i++)
+                for (var i = 0; i < rows / (k + 1); i++)
                 {
+                    var row = new double[cols / (k + 1)];
                     for (var j = 0; j < row.Length; j++)
                         row[j] = data[i, j];
 
@@ -144,8 +154,10 @@ namespace DigitalWatermarking.haar
                         data[i, j] = row[j];
                 }
 
-                for (var j = 0; j < cols; j++)
+                for (var j = 0; j < cols / (k + 1); j++)
                 {
+                    var col = new double[rows / (k + 1)];
+
                     for (var i = 0; i < col.Length; i++)
                         col[i] = data[i, j];
 
@@ -188,14 +200,14 @@ namespace DigitalWatermarking.haar
             var rows = data.GetLength(0);
             var cols = data.GetLength(1);
 
-            var col = new double[rows];
-            var row = new double[cols];
 
             for (var l = 0; l < iterations; l++)
             {
-                for (var j = 0; j < cols; j++)
+                for (var j = 0; j < cols/ (iterations - l); j++)
                 {
-                    for (var i = 0; i < row.Length; i++)
+                    var col = new double[rows / (iterations - l)];
+
+                    for (var i = 0; i < col.Length; i++)
                         col[i] = data[i, j];
 
                     IWT(col);
@@ -204,8 +216,10 @@ namespace DigitalWatermarking.haar
                         data[i, j] = col[i];
                 }
 
-                for (var i = 0; i < rows; i++)
+                for (var i = 0; i < rows/ (iterations - l); i++)
                 {
+                    var row = new double[cols / (iterations - l)];
+
                     for (var j = 0; j < row.Length; j++)
                         row[j] = data[i, j];
 

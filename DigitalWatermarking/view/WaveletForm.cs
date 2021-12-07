@@ -3,10 +3,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using DigitalWatermarking.decoder;
 using DigitalWatermarking.encoder;
+using DigitalWatermarking.haar;
 
 namespace DigitalWatermarking.view
 {
-    public partial class WaveletForm : Form
+    public partial class WaveletForm : BaseForm
     {
         public WaveletForm()
         {
@@ -36,14 +37,23 @@ namespace DigitalWatermarking.view
         {
             var message = tb_message_original.Text;
             var originalImage = new Bitmap(ofd_file_chooser.FileName);
-            var encoder = new LsbTextBitBaseEncoder(originalImage, message);
+            var encoder = new HaarEncoder(originalImage, message);
             encoder.Encode();
             pb_file_encoded.Image = encoder.GetEncoded();
+            pb_file_encoded.SizeMode = PictureBoxSizeMode.StretchImage;
 
 
-            var decoder = new LsbTextDecoder(encoder.GetEncoded());
+            var decoder = new HaarDecoder(originalImage, encoder.GetEncoded());
             decoder.Decode();
             lbl_message_decoded_text.Text = decoder.GetMessage();
+            pb_transform.Image = encoder.GetTransformed();
+            pb_transform.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            pb_compare.Image = GetComparison(originalImage, encoder.GetEncoded());
+
+            // var decoder = new LsbTextDecoder(encoder.GetEncoded());
+            // decoder.Decode();
+            // lbl_message_decoded_text.Text = decoder.GetMessage();
         }
 
         private void tb_message_original_TextChanged(object sender, EventArgs e)
@@ -59,5 +69,6 @@ namespace DigitalWatermarking.view
 
             lbl_start_error.Text = btn_start.Enabled ? "" : "Choose message and file to start!";
         }
+
     }
 }
