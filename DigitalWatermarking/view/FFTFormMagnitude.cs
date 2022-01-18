@@ -10,9 +10,9 @@ using DigitalWatermarking.encoder;
 
 namespace DigitalWatermarking
 {
-    public partial class FFTForm : Form
+    public partial class FFTFormMagnitude : Form
     {
-        public FFTForm()
+        public FFTFormMagnitude()
         {
             InitializeComponent();
             UpdateEnableEncoding();
@@ -28,7 +28,7 @@ namespace DigitalWatermarking
             }
 
             var originalImage = new Bitmap(ofd_file_chooser.FileName);
-            var encoder = new FFTEncoder(originalImage, tb_message_original.Text);
+            var encoder = new FFTEncoder(originalImage, "");
             pb_file_original.Image = encoder.GreyOriginalImage;
             pb_file_original.SizeMode = PictureBoxSizeMode.StretchImage;
 
@@ -39,22 +39,12 @@ namespace DigitalWatermarking
 
         private void start_click(object sender, EventArgs e)
         {
-            var message = tb_message_original.Text;
+            var message = "";
             var originalImage = new Bitmap(ofd_file_chooser.FileName);
             var encoder = new FFTEncoder(originalImage, message);
             encoder.EncodeMessage();
-            pb_file_encoded.Image = encoder.EncodedImage;
-            encoder.EncodedImage.Save(Application.StartupPath + "\\img.jpg");
+            pb_file_encoded.Image = encoder.MagnitudePlotImage;
             pb_file_encoded.SizeMode = PictureBoxSizeMode.StretchImage;
-            magnitude_img.Image = encoder.MagnitudePlotImage;
-            magnitude_img.SizeMode = PictureBoxSizeMode.StretchImage;
-
-            var decoder = new FFTDecoder();
-            decoder.DecodeImage(encoder.EncodedImage, encoder.GreyOriginalImage, message);
-            lbl_message_decoded_text.Text = decoder.DecodedMessage;
-            accuracy_label.Text = decoder.AccuracyInfo;
-            magnitude_img.Image = encoder.MagnitudePlotImage; 
-
         }
 
         private void tb_message_original_TextChanged(object sender, EventArgs e)
@@ -64,14 +54,17 @@ namespace DigitalWatermarking
 
         private void UpdateEnableEncoding()
         {
-            btn_start.Enabled = !string.IsNullOrEmpty(tb_message_original.Text) &&
-                                //cb_method_encoding.SelectedItem != null &&
-                                !string.IsNullOrEmpty(ofd_file_chooser.SafeFileName);
+            btn_start.Enabled = !string.IsNullOrEmpty(ofd_file_chooser.SafeFileName);
 
-            lbl_start_error.Text = btn_start.Enabled ? "" : "Choose message and file to start!";
+            lbl_start_error.Text = btn_start.Enabled ? "" : "Choose file to start!";
         }
 
         private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbl_file_encoded_Click(object sender, EventArgs e)
         {
 
         }

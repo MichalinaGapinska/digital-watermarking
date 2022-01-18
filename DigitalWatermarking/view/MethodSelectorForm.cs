@@ -12,8 +12,9 @@ namespace DigitalWatermarking
         private const string FFTColorEncodingImage = "FFT color encoding (text)";
         private const string SinColorEncodingImage = "Sin color encoding (text)";
         private const string CosColorEncodingImage = "Cos color encoding (text)";
+        private const string FFTMagnitude = "Magnitude viewer";
         private const string MethodAnother = "Another method";
-        private readonly object[] _encodingMethods = {MethodByteEncodingText, MethodByteEncodingImage, FFTEncodingImage, FFTColorEncodingImage, SinColorEncodingImage, CosColorEncodingImage, MethodAnother };
+        private readonly object[] _encodingMethods = {MethodByteEncodingText, MethodByteEncodingImage, FFTEncodingImage, FFTColorEncodingImage, SinColorEncodingImage, CosColorEncodingImage, FFTMagnitude };
 
         public MethodSelectorForm()
         {
@@ -56,6 +57,9 @@ namespace DigitalWatermarking
                     break;
                 case CosColorEncodingImage:
                     OpenForm(new CosColorForm());
+                    break;
+                case FFTMagnitude:
+                    OpenForm(new FFTFormMagnitude());
                     break;
                 case MethodAnother:
                     // OpenForm(new sthg());

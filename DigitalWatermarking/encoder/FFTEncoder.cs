@@ -13,11 +13,12 @@ namespace DigitalWatermarking.encoder
         private readonly Bitmap _originalImage;
         public Bitmap GreyOriginalImage { get; private set; }
         private readonly string _message;
-        private static readonly double _oneFactore = 1.5;
-        private static readonly double _zeroFactore = 0.8;
+        private static double _oneFactore = 1.5;
+        private static double _zeroFactore = 0.8;
 
         public Bitmap EncodedImage { get; private set; }
         public Bitmap MagnitudePlotImage { get; private set; }
+        public Bitmap MagnitudeOriginalPlotImage { get; private set; }
         public FFTEncoder(Bitmap bitmap, string message)
         {
             _originalImage = bitmap;
@@ -34,7 +35,8 @@ namespace DigitalWatermarking.encoder
 
             fft.ForwardFFT();
             fft.FFTShift();
-
+            fft.FFTPlot();
+            MagnitudeOriginalPlotImage = fft.FourierPlot;
             var magnitude = fft.FFTShifted;
 
             int d1 = fft.Width / 3;
@@ -42,7 +44,7 @@ namespace DigitalWatermarking.encoder
             var byteMessage = new BitArray(Encoding.ASCII.GetBytes(_message));
             int pos = 0;
            
-            for (int c = d1; c < Math.Min(d1 + byteMessage.Length, fft.Width); c++)
+            for (int c = d1; c < Math.Min(d1 + byteMessage.Length , fft.Width); c++)
             {
                 if (!byteMessage[pos])
                 {
@@ -74,7 +76,7 @@ namespace DigitalWatermarking.encoder
             //reverse
             fft.Output = magnitude;
             fft.FFTPlot();
-            MagnitudePlotImage = fft.PhasePlot;
+            MagnitudePlotImage = fft.FourierPlot;
             fft.FFTShift();
             fft.InverseFFT(fft.FFTShifted);
 

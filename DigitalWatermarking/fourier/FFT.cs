@@ -1,3 +1,4 @@
+using DigitalWatermarking.tools;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -7,7 +8,7 @@ namespace DigitalWatermarking.fourier
     /// <summary>
     /// Defining Structure for Complex Data type  N=R+Ii
     /// </summary>
-    struct COMPLEX
+    public struct COMPLEX
     {
         public double real, imag;
 
@@ -330,6 +331,7 @@ namespace DigitalWatermarking.fourier
             FourierPhase = new float[nx, ny];
 
             FFTNormalized = new int[nx, ny];
+            var FFTNormalizedMY = new float[nx, ny];
             FFTPhaseNormalized = new int[nx, ny];
 
             for (i = 0; i <= Width - 1; i++)
@@ -359,11 +361,15 @@ namespace DigitalWatermarking.fourier
             for (i = 0; i <= Width - 1; i++)
             for (j = 0; j <= Height - 1; j++)
             {
-                FFTNormalized[i, j] = (int) (1000 * FFTLog[i, j]);
+                FFTNormalized[i, j] = (int) (100000 * FFTLog[i, j]);
+                FFTNormalizedMY[i, j] = 100000000 * FFTLog[i, j];
             }
 
+            FFTNormalized = ToolBox.NormalizeMatrix(FFTNormalizedMY, 0, 1275);
+
             //Transferring Image to Fourier Plot
-            FourierPlot = Displayimage(FFTNormalized);
+            //FourierPlot = Displayimage(FFTNormalized);
+            FourierPlot = ToolBox.GetImage(FFTNormalized,0);
 
             //generating phase Bitmap
 

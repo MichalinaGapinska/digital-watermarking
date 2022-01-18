@@ -68,11 +68,18 @@
     <Compile Include="fourier\FFT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tools\ToolBox.cs" />
     <Compile Include="view\CosColorForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="view\CosColorForm.Designer.cs">
       <DependentUpon>CosColorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\FFTFormMagnitude.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\FFTFormMagnitude.Designer.cs">
+      <DependentUpon>FFTFormMagnitude.cs</DependentUpon>
     </Compile>
     <Compile Include="view\SinColorForm.cs">
       <SubType>Form</SubType>
@@ -121,6 +128,9 @@
     </Compile>
     <EmbeddedResource Include="view\CosColorForm.resx">
       <DependentUpon>CosColorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\FFTFormMagnitude.resx">
+      <DependentUpon>FFTFormMagnitude.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="view\SinColorForm.resx">
       <DependentUpon>SinColorForm.cs</DependentUpon>
