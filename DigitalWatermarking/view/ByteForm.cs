@@ -43,14 +43,13 @@ namespace DigitalWatermarking.view
 
             var decoder = new LsbTextDecoder(encoder.GetEncoded());
             decoder.Decode();
-            lbl_message_decoded_text.Text = decoder.GetMessage();
+            lbl_message_decoded_text.Text = decoder.GetMessage().Substring(0, 18);
         }
 
         private void tb_message_original_TextChanged(object sender, EventArgs e)
         {
             UpdateEnableEncoding();
         }
-
         private void UpdateEnableEncoding()
         {
             btn_start.Enabled = !string.IsNullOrEmpty(tb_message_original.Text) &&
