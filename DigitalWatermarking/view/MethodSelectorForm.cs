@@ -49,6 +49,7 @@ namespace DigitalWatermarking
                     break;
                 case MethodByteWavelet:
                     OpenForm(new WaveletForm());
+                    break;
                 case FFTEncodingImage:
                     OpenForm(new FFTForm());
                     break;
